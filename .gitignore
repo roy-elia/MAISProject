@@ -1,0 +1,93 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Models and outputs
+reddit_year_model*/
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Data (if large)
+# Uncomment if you don't want to commit data
+# data/sampled_comments/
+
+# Plots and outputs
+plots/
+outputs/
+*.png
+*.jpg
+*.pdf
+
+# Allow frontend public assets
+!frontend/public/*.png
+!frontend/public/*.jpg
+!frontend/public/*.svg
+!frontend/public/*.ico
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Environment variables
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+
+# Node
+node_modules/
+*/node_modules/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Build outputs
+.next/
+dist/
+build/
+
+# OS junk
+.DS_Store
