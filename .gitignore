@@ -10,8 +10,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
 parts/
 sdist/
 var/
@@ -33,23 +31,11 @@ ENV/
 *.swo
 *~
 
-# Models and outputs
-reddit_year_model*/
-*.pt
-*.pth
-*.bin
-*.safetensors
 
 # Data (if large)
 # Uncomment if you don't want to commit data
 # data/sampled_comments/
 
-# Plots and outputs
-plots/
-outputs/
-*.png
-*.jpg
-*.pdf
 
 # Allow frontend public assets
 !frontend/public/*.png

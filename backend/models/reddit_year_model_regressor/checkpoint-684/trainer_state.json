@@ -1,0 +1,92 @@
+{
+  "best_global_step": 684,
+  "best_metric": 25.48216438293457,
+  "best_model_checkpoint": "./reddit_year_model_regressor/checkpoint-684",
+  "epoch": 3.0,
+  "eval_steps": 500,
+  "global_step": 684,
+  "is_hyper_param_search": false,
+  "is_local_process_zero": true,
+  "is_world_process_zero": true,
+  "log_history": [
+    {
+      "epoch": 1.0,
+      "eval_loss": 30.128555297851562,
+      "eval_mae": 4.750833988189697,
+      "eval_mse": 30.128557205200195,
+      "eval_off_by_1_acc": 0.10526315789473684,
+      "eval_off_by_2_acc": 0.21052631578947367,
+      "eval_r2": -0.004285216331481934,
+      "eval_rmse": 5.488948642973461,
+      "eval_runtime": 11.8861,
+      "eval_samples_per_second": 19.182,
+      "eval_steps_per_second": 1.262,
+      "step": 228
+    },
+    {
+      "epoch": 2.0,
+      "eval_loss": 28.25624656677246,
+      "eval_mae": 4.569739818572998,
+      "eval_mse": 28.256248474121094,
+      "eval_off_by_1_acc": 0.10964912280701754,
+      "eval_off_by_2_acc": 0.2149122807017544,
+      "eval_r2": 0.05812501907348633,
+      "eval_rmse": 5.315660680867534,
+      "eval_runtime": 11.0171,
+      "eval_samples_per_second": 20.695,
+      "eval_steps_per_second": 1.362,
+      "step": 456
+    },
+    {
+      "epoch": 2.192982456140351,
+      "grad_norm": 132.95062255859375,
+      "learning_rate": 6.016260162601627e-06,
+      "loss": 38.0574,
+      "step": 500
+    },
+    {
+      "epoch": 3.0,
+      "eval_loss": 25.48216438293457,
+      "eval_mae": 4.265596866607666,
+      "eval_mse": 25.48216438293457,
+      "eval_off_by_1_acc": 0.13596491228070176,
+      "eval_off_by_2_acc": 0.2675438596491228,
+      "eval_r2": 0.1505945324897766,
+      "eval_rmse": 5.047986171032422,
+      "eval_runtime": 11.0327,
+      "eval_samples_per_second": 20.666,
+      "eval_steps_per_second": 1.36,
+      "step": 684
+    }
+  ],
+  "logging_steps": 500,
+  "max_steps": 684,
+  "num_input_tokens_seen": 0,
+  "num_train_epochs": 3,
+  "save_steps": 500,
+  "stateful_callbacks": {
+    "EarlyStoppingCallback": {
+      "args": {
+        "early_stopping_patience": 2,
+        "early_stopping_threshold": 0.0
+      },
+      "attributes": {
+        "early_stopping_patience_counter": 0
+      }
+    },
+    "TrainerControl": {
+      "args": {
+        "should_epoch_stop": false,
+        "should_evaluate": false,
+        "should_log": false,
+        "should_save": true,
+        "should_training_stop": true
+      },
+      "attributes": {}
+    }
+  },
+  "total_flos": 719865384026112.0,
+  "train_batch_size": 8,
+  "trial_name": null,
+  "trial_params": null
+}
