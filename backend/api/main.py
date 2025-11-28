@@ -53,42 +53,15 @@ class PredictionResponse(BaseModel):
 
 @app.on_event("startup")
 async def load_model():
-    """Load model on startup."""
+    """Load regression-only model on startup."""
     global predictor
-    
-    # Default model paths - adjust as needed
+
     model_path_regression = os.getenv(
         "MODEL_PATH_REGRESSION",
         "./backend/models/reddit_year_model_regressor"
     )
-    model_path_classification = os.getenv(
-        "MODEL_PATH_CLASSIFICATION",
-        "./backend/models/reddit_year_model"  # Default to 2-bin classifier model
-    )
-    
-    # Try to load 2-bin classifier model first (final model)
-    if os.path.exists(model_path_classification):
-        try:
-            predictor = YearPredictor(
-                model_path=model_path_classification,
-                task_type="classification"
-            )
-            print(f"Loaded 2-bin classifier model from {model_path_classification}")
-        except Exception as e:
-            print(f"Error loading classification model: {e}")
-            # Fallback to regression if classification fails
-            if os.path.exists(model_path_regression):
-                try:
-                    predictor = YearPredictor(
-                        model_path=model_path_regression,
-                        task_type="regression",
-                        start_year=2006,
-                        end_year=2024
-                    )
-                    print(f"Loaded regression model from {model_path_regression}")
-                except Exception as e2:
-                    print(f"Error loading regression model: {e2}")
-    elif os.path.exists(model_path_regression):
+
+    if os.path.exists(model_path_regression):
         try:
             predictor = YearPredictor(
                 model_path=model_path_regression,
@@ -96,12 +69,14 @@ async def load_model():
                 start_year=2006,
                 end_year=2024
             )
-            print(f"Loaded regression model from {model_path_regression}")
+            print(f"✅ Loaded regression model from {model_path_regression}")
         except Exception as e:
-            print(f"Error loading regression model: {e}")
+            print(f"❌ Error loading regression model: {e}")
+            predictor = None
     else:
-        print(f"Warning: Models not found at {model_path_classification} or {model_path_regression}")
-        print("Please train a model first or set MODEL_PATH_CLASSIFICATION environment variable")
+        print(f"❌ Regression model NOT found at {model_path_regression}")
+        predictor = None
+
 
 
 @app.get("/")
