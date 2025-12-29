@@ -1,3 +1,4 @@
+
 # Modeling Linguistic Change Over Time on Reddit
 
 Transformer-based NLP models that estimate **when a Reddit comment was written using only its text**.  
@@ -36,7 +37,7 @@ The frontend sends user-submitted Reddit-style comments to the backend API, whic
 ## Architecture
 
 | Layer | Stack | Notes |
-| --- | --- | --- |
+|------|------|------|
 | Frontend | Next.js 14, Tailwind, shadcn/ui | `frontend/` contains the entire site (hero, methodology, demo, visualizations) |
 | Backend | FastAPI, Uvicorn | `backend/api/main.py` exposes `/predict`, prioritizing classification and falling back to regression |
 | Models | Hugging Face Transformers | `reddit_year_model` (2-bin classifier) and `reddit_year_model_regressor` (exact year) |
@@ -49,23 +50,25 @@ The frontend sends user-submitted Reddit-style comments to the backend API, whic
 
 ```
 MAIS202-project/
-├── backend/                      # Backend API and ML models
-│   ├── api/                     # FastAPI server
-│   ├── core/                    # Core prediction and model logic
-│   ├── training/                 # Training scripts
-│   ├── models/                   # Model artifacts (drop trained weights here)
-│   ├── scripts/                  # Utility scripts (visualizations, etc.)
-│   └── config/                   # Configuration files
-├── frontend/                     # Next.js 14 site
-│   ├── app/                     # Pages + layout
-│   ├── components/              # React components for each section
-│   └── public/                  # Logos, favicon, visualization PNGs
-├── data/                        # Dataset files
-├── docs/                        # Documentation and guides
-├── scripts/                     # Startup and utility scripts
-└── README.md                    # This file
+|
+|-- backend/                       Backend API and ML models
+|   |-- api/                       FastAPI server
+|   |-- core/                      Core prediction and model logic
+|   |-- training/                  Training scripts
+|   |-- models/                    Model artifacts (trained weights)
+|   |-- scripts/                   Utility scripts (visualizations, analysis)
+|   |-- config/                    Configuration files
+|
+|-- frontend/                      Next.js 14 site
+|   |-- app/                       Pages and layout
+|   |-- components/                React components
+|   |-- public/                    Logos, favicon, visualization PNGs
+|
+|-- data/                          Dataset files
+|-- docs/                          Documentation and guides
+|-- scripts/                       Startup and utility scripts
+|-- README.md                      Project overview
 ```
-
 
 
 
@@ -78,122 +81,118 @@ MAIS202-project/
 python -m venv .venv
 source .venv/bin/activate
 pip install -r backend/requirements.txt
+```
 
+**Frontend**
+```bash
 cd frontend
 npm install
 cd ..
 ```
-See backend/README.md and frontend/README.md for detailed setup instructions.
+
+See `backend/README.md` and `frontend/README.md` for detailed setup instructions.
+
 
 
 ### 2. Provide Model Weights
 
 To enable inference, trained model weights must be added to the backend.
 
-Classifier (preferred demo experience)
-Place all Hugging Face model files (config.json, tokenizer files, model.safetensors, etc.) inside:
-```bash
+**Classifier (preferred demo experience)**  
+Place all Hugging Face model files (`config.json`, tokenizer files, `model.safetensors`, etc.) inside:
+```
 backend/models/reddit_year_model/
 ```
 
-Regression fallback 
-Keep the following directory available so the /predict endpoint remains functional even if classifier weights are missing:
-```bash
+**Regression fallback (optional)**  
+Keep the following directory available so the `/predict` endpoint remains functional even if classifier weights are missing:
+```
 backend/models/reddit_year_model_regressor/
 ```
 
-For detailed instructions, see:
-docs/COPY_MODEL_FILES.md
+For detailed instructions, see:  
+`docs/COPY_MODEL_FILES.md`
+
 
 
 ### 3. Start Services
 
 Once dependencies and model weights are in place, start the backend and frontend services.
 
-## Option A: Use the Startup Script
+#### Option A: Use the Startup Script
 ```bash
 ./start_all.sh
 ```
 
 This will automatically start both the backend API and the frontend web application.
 
+#### Option B: Start Manually
 
-### Option B: Start Manually
-
-# Backend
+**Backend**
 ```bash
 uvicorn backend.api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-# Frontend
+**Frontend**
 ```bash
 cd frontend
 npm run dev
 ```
 
-Open the application in your browser at:
+Open the application in your browser at:  
 http://localhost:3000
 
 
-### Project Structure
 
-**backend/README.md** — Backend setup, training, and API documentation
+## Project Structure
 
-**frontend/README.md** — Frontend setup and development guide
-
-**docs/** — Additional documentation
-
-**demo-guide.md** — Step-by-step demo walkthrough
-
-**testing-checklist.md** — Pre-presentation checklist
-
-**COPY_MODEL_FILES.md** — How to add trained model weights
-
-**GENERATE_VISUALIZATIONS.md** — Visualization generation guide
+- **backend/README.md** — Backend setup, training, and API documentation  
+- **frontend/README.md** — Frontend setup and development guide  
+- **docs/** — Additional documentation:
+  - `demo-guide.md` — Step-by-step demo walkthrough  
+  - `testing-checklist.md` — Pre-presentation checklist  
+  - `COPY_MODEL_FILES.md` — How to add trained model weights  
+  - `GENERATE_VISUALIZATIONS.md` — Visualization generation guide  
 
 
-### Results
 
-| Model Type             | # Bins | Accuracy | Comments                           |
-| ---------------------- | ------ | -------- | ---------------------------------- |
-| Linear Regression      | —      | MSE ≈ 19 | Too slow and data-hungry           |
-| Multi-class Classifier | 2      | ~85%     | Best balance of speed and accuracy |
-| Multi-class Classifier | 3      | ~60%     | Needs more epochs                  |
-| Multi-class Classifier | 4      | ~53%     | Needs more data                    |
+## Results
 
-
-### Final Model
-
-Architecture: RoBERTa-base
-
-**Task:** 2-bin classification (2008–2010 vs 2020–2022)
-
-**Epochs:** 3
-
-**Learning rate:** 2e-5
-
-**Accuracy:** 85.3%
-
-**Precision:** 87.3%
-
-**F1 score:** 85.5%
+| Model Type | # Bins | Accuracy | Comments |
+|-----------|--------|----------|----------|
+| Linear Regression | — | MSE ≈ 19 | Too slow and data-hungry |
+| Multi-class Classifier | 2 | ~85% | Best balance of speed and accuracy |
+| Multi-class Classifier | 3 | ~60% | Needs more epochs |
+| Multi-class Classifier | 4 | ~53% | Needs more data |
 
 
-### Project Purpose
 
-This project demonstrates that language alone contains strong temporal signals.
+## Final Model
+
+- **Architecture:** RoBERTa-base  
+- **Task:** 2-bin classification (2008–2010 vs 2020–2022)  
+- **Epochs:** 3  
+- **Learning rate:** 2e-5  
+- **Accuracy:** 85.3%  
+- **Precision:** 87.3%  
+- **F1 score:** 85.5%  
+
+
+
+## Project Purpose
+
+This project demonstrates that **language alone contains strong temporal signals**.
 
 By modeling linguistic drift, we show how NLP systems can:
-
-Detect cultural and slang evolution
-
-Reveal temporal bias in language models
-
-Motivate retraining strategies for long-lived NLP systems
+- Detect cultural and slang evolution
+- Reveal temporal bias in language models
+- Motivate retraining strategies for long-lived NLP systems
 
 
-### Contact
+
+## Contact
 
 For questions, feedback, or collaboration inquiries, please reach out to:
 
-roy.elia@mail.mcgill.ca
+**roy.elia@mail.mcgill.ca**
+
