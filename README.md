@@ -1,23 +1,52 @@
 # Modeling Linguistic Change Over Time on Reddit
 
-Transformer models that guess when a Reddit comment was written just by reading the text. We analyze 18 years of language drift (2006 → 2024) and present it in a polished Next.js + FastAPI demo for the MAIS Machine Learning Bootcamp.
+Transformer-based NLP models that estimate **when a Reddit comment was written using only its text**.  
+We analyze **18 years of linguistic drift (2006 → 2024)** and present the results through a **production-style web application** built with **Next.js (frontend)** and **FastAPI (backend)**.
+
+This project was developed for the **MAIS Machine Learning Bootcamp (Fall 2025)** and focuses on **language evolution, temporal generalization, and real-world ML deployment**.
+
+
+
+## Live Deployment
+
+The project is deployed online using a **modern split-stack architecture**, mirroring real-world ML systems.
+
+**Frontend (Vercel)**  
+https://mais-frontend-psi.vercel.app/
+
+**Backend API (Render)**  
+https://maisproject.onrender.com
+
+The frontend sends user-submitted Reddit-style comments to the backend API, which performs inference using fine-tuned transformer models and returns a predicted year (or time bin).
+
+*Note:* The backend may take a few seconds to respond on the first request due to Render cold starts.
+
+
 
 ## Snapshot
-- **85.3%** accuracy with a RoBERTa-base 2-bin classifier (2008-2010 vs 2020-2022)
-- **Regression fallback** (MAE ≈ 4.4 years) keeps the `/predict` endpoint alive even without classifier weights
-- **Next.js frontend** for the showcase, **FastAPI backend** for inference
-- **Visualizations + storytelling** assets ready for a project fair booth
+
+- **85.3% accuracy** using a **RoBERTa-base 2-bin classifier** (2008–2010 vs 2020–2022)
+- **Regression fallback** (MAE ≈ 4.4 years) keeps the `/predict` endpoint functional even without classifier weights
+- **Next.js frontend** for visualization and interaction
+- **FastAPI backend** for inference
+- **Visualizations and storytelling assets** ready for a project fair or demo booth
+
+
 
 ## Architecture
+
 | Layer | Stack | Notes |
 | --- | --- | --- |
 | Frontend | Next.js 14, Tailwind, shadcn/ui | `frontend/` contains the entire site (hero, methodology, demo, visualizations) |
-| Backend | FastAPI, Uvicorn | `backend/api/main.py` exposes `/predict`, prioritizing the classifier and falling back to regression |
-| Models | Hugging Face Transformers | `backend/models/reddit_year_model` (2-bin classifier) and `backend/models/reddit_year_model_regressor` (exact year) |
-| Training | Python scripts + PyTorch | `backend/training/2binclassifier.py`, `backend/training/train_classifier.py`, `backend/training/train_regressor.py` |
-| Assets | Static PNG/SVG | Drop plots and logos in `frontend/public/` |
+| Backend | FastAPI, Uvicorn | `backend/api/main.py` exposes `/predict`, prioritizing classification and falling back to regression |
+| Models | Hugging Face Transformers | `reddit_year_model` (2-bin classifier) and `reddit_year_model_regressor` (exact year) |
+| Training | Python + PyTorch | Training scripts in `backend/training/` |
+| Assets | Static PNG / SVG | Stored in `frontend/public/` |
+
+
 
 ## Repository Layout
+
 ```
 MAIS202-project/
 ├── backend/                      # Backend API and ML models
@@ -37,80 +66,134 @@ MAIS202-project/
 └── README.md                    # This file
 ```
 
+
+
+
 ## Quick Start
 
 ### 1. Install Dependencies
 
-**Backend:**
+**Backend**
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install -r backend/requirements.txt
-```
 
-**Frontend:**
-```bash
-cd frontend && npm install && cd ..
+cd frontend
+npm install
+cd ..
 ```
+See backend/README.md and frontend/README.md for detailed setup instructions.
 
-See [backend/README.md](backend/README.md) and [frontend/README.md](frontend/README.md) for detailed setup instructions.
 
 ### 2. Provide Model Weights
 
-- **Classifier (preferred demo experience)** → place Hugging Face files (config, tokenizer, `model.safetensors`, etc.) inside `./backend/models/reddit_year_model/`.
-- **Regression fallback** → optional, but keep `./backend/models/reddit_year_model_regressor/` around so `/predict` keeps working even if classifier weights are missing.
+To enable inference, trained model weights must be added to the backend.
 
-See [docs/COPY_MODEL_FILES.md](docs/COPY_MODEL_FILES.md) for detailed instructions.
+Classifier (preferred demo experience)
+Place all Hugging Face model files (config.json, tokenizer files, model.safetensors, etc.) inside:
+```bash
+backend/models/reddit_year_model/
+```
+
+Regression fallback 
+Keep the following directory available so the /predict endpoint remains functional even if classifier weights are missing:
+```bash
+backend/models/reddit_year_model_regressor/
+```
+
+For detailed instructions, see:
+docs/COPY_MODEL_FILES.md
+
 
 ### 3. Start Services
 
-**Option A: Use the startup script**
+Once dependencies and model weights are in place, start the backend and frontend services.
+
+## Option A: Use the Startup Script
 ```bash
 ./start_all.sh
 ```
 
-**Option B: Start manually**
+This will automatically start both the backend API and the frontend web application.
 
-Backend:
+
+### Option B: Start Manually
+
+# Backend
 ```bash
 uvicorn backend.api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Frontend:
+# Frontend
 ```bash
 cd frontend
 npm run dev
 ```
 
-Open http://localhost:3000 and use the Interactive Demo section.
+Open the application in your browser at:
+http://localhost:3000
 
-## Project Structure
 
-- **[backend/README.md](backend/README.md)** - Backend setup, training, API documentation
-- **[frontend/README.md](frontend/README.md)** - Frontend setup, development guide
-- **[docs/](docs/)** - Additional documentation
-  - `demo-guide.md` - Step-by-step playbook for running the demo
-  - `testing-checklist.md` - Pre-presentation verification checklist
-  - `COPY_MODEL_FILES.md` - How to add trained model weights
-  - `GENERATE_VISUALIZATIONS.md` - Visualization generation guide
+### Project Structure
 
-## Results
+**backend/README.md** — Backend setup, training, and API documentation
 
-| Model Type            | # bins  | Accuracy | Comments |
-|----------------------|---------|----------|----------|
-| Linear Regression     |  None   | MSE = 19 | Too slow + requires a lot of data |
-| Multi-class classifier|   2     | ~ 85%    | Best in terms of accuracy and speed |
-| Multi-class classifier|   3     | ~ 60%    | Needs more epochs for better accuracy |
-| Multi-class classifier|   4     | ~ 53%    | Needs more data for better accuracy |
+**frontend/README.md** — Frontend setup and development guide
 
-**Final Model:**
-- RoBERTa-base
-- 2-bin classifier (2008-2010, 2020-2022)
-- Epochs = 3
-- Learning rate = 2e-5
-- Accuracy: 85.3%
-- Precision: 87.3%
-- F1: 85.5%
+**docs/** — Additional documentation
 
-## Contact
+**demo-guide.md** — Step-by-step demo walkthrough
 
-Questions or issues? Reach out to the MAIS Machine Learning Bootcamp Fall 2025 team.
+**testing-checklist.md** — Pre-presentation checklist
+
+**COPY_MODEL_FILES.md** — How to add trained model weights
+
+**GENERATE_VISUALIZATIONS.md** — Visualization generation guide
+
+
+### Results
+
+| Model Type             | # Bins | Accuracy | Comments                           |
+| ---------------------- | ------ | -------- | ---------------------------------- |
+| Linear Regression      | —      | MSE ≈ 19 | Too slow and data-hungry           |
+| Multi-class Classifier | 2      | ~85%     | Best balance of speed and accuracy |
+| Multi-class Classifier | 3      | ~60%     | Needs more epochs                  |
+| Multi-class Classifier | 4      | ~53%     | Needs more data                    |
+
+
+### Final Model
+
+Architecture: RoBERTa-base
+
+**Task:** 2-bin classification (2008–2010 vs 2020–2022)
+
+**Epochs:** 3
+
+**Learning rate:** 2e-5
+
+**Accuracy:** 85.3%
+
+**Precision:** 87.3%
+
+**F1 score:** 85.5%
+
+
+### Project Purpose
+
+This project demonstrates that language alone contains strong temporal signals.
+
+By modeling linguistic drift, we show how NLP systems can:
+
+Detect cultural and slang evolution
+
+Reveal temporal bias in language models
+
+Motivate retraining strategies for long-lived NLP systems
+
+
+### Contact
+
+For questions, feedback, or collaboration inquiries, please reach out to:
+
+roy.elia@mail.mcgill.ca
