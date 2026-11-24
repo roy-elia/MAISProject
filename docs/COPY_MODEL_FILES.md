@@ -1,3 +1,10 @@
+---
+owner: roy-elia
+status: active
+last_updated: 2025-11-26
+source_of_truth: local
+tags: []
+---
 # How to Copy Your Trained Model Files
 
 ## Quick Steps

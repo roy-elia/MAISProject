@@ -1,3 +1,10 @@
+---
+owner: roy-elia
+status: active
+last_updated: 2025-11-26
+source_of_truth: local
+tags: []
+---
 # Demo Guide
 
 This playbook walks through everything needed to run the live Reddit language drift demo.
