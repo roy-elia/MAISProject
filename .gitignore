@@ -86,3 +86,6 @@ temp/
 !.env.example
 CLAUDE.local.md
 .claude/settings.local.json
+
+# Local ngrok config holds an authtoken; copy ngrok.yml.example
+ngrok.yml
