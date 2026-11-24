@@ -1,3 +1,10 @@
+---
+owner: roy-elia
+status: active
+last_updated: 2025-11-26
+source_of_truth: local
+tags: []
+---
 # Testing Checklist
 
 Run through this list before presenting, committing, or deploying.
