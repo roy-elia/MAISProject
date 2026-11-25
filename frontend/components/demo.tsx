@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Calendar, ExternalLink, Sparkles } from "lucide-react"
 import { getGitHubRepoUrl } from "@/lib/config"
 
@@ -12,14 +12,29 @@ export function Demo() {
   const [predictedYear, setPredictedYear] = useState<string | null>(null)
   const [predictionData, setPredictionData] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isWaking, setIsWaking] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const wakeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // The backend runs on a free host that sleeps when idle. Start waking it as
+  // soon as the page loads, so the first prediction is less likely to wait.
+  useEffect(() => {
+    fetch("/api/health").catch(() => {})
+    return () => {
+      if (wakeTimer.current) clearTimeout(wakeTimer.current)
+    }
+  }, [])
 
   const handlePredict = async () => {
     if (!inputText.trim()) return
 
     setIsLoading(true)
+    setErrorMessage(null)
     // Clear previous prediction
     setPredictedYear(null)
     setPredictionData(null)
+    // After a few seconds, explain the wait instead of leaving a silent spinner.
+    wakeTimer.current = setTimeout(() => setIsWaking(true), 5000)
     
     try {
       // Use relative API path (proxied through Next.js to backend)
@@ -31,7 +46,7 @@ export function Demo() {
         },
         body: JSON.stringify({
           text: inputText.trim(),
-          task_type: "classification", // 2-bin classifier: 2008-2010 vs 2020-2022
+          task_type: "regression", // the backend serves the regression model only
         }),
       })
 
@@ -46,11 +61,12 @@ export function Demo() {
       setPredictionData(data)
     } catch (error) {
       console.error("Prediction error:", error)
-      // Fallback to placeholder if API is not available
-      const randomRange = Math.random() > 0.5 ? "2008-2010" : "2020-2022"
-      setPredictedYear(randomRange)
-      alert("API not available. Showing placeholder result. Make sure the backend server is running.")
+      setErrorMessage(
+        "The prediction server did not respond. It may still be starting up; please try again in a minute.",
+      )
     } finally {
+      if (wakeTimer.current) clearTimeout(wakeTimer.current)
+      setIsWaking(false)
       setIsLoading(false)
     }
   }
@@ -104,6 +120,19 @@ export function Demo() {
               {isLoading ? "Predicting..." : "Predict Year"}
             </Button>
 
+            {isWaking && (
+              <p className="text-sm text-muted-foreground text-center" role="status">
+                Waking up the prediction server. It sleeps when nobody has used it for a while, so the first
+                request can take up to a minute.
+              </p>
+            )}
+
+            {errorMessage && (
+              <p className="text-sm text-destructive text-center" role="alert">
+                {errorMessage}
+              </p>
+            )}
+
             {predictedYear && (
               <div className="p-8 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 border-2 border-accent/30 rounded-2xl text-center relative overflow-hidden shadow-2xl hover:shadow-accent/30 transition-all card-hover">
                 <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-accent/5 to-transparent opacity-60" />
@@ -126,8 +155,9 @@ export function Demo() {
 
             <div className="pt-4 border-t border-border">
               <p className="text-sm text-muted-foreground mb-4">
-                <strong className="text-foreground">Note:</strong> This demo uses a 2-bin classifier model that predicts whether a comment is from 
-                <strong className="text-foreground"> 2008-2010</strong> or <strong className="text-foreground">2020-2022</strong>.
+                <strong className="text-foreground">Note:</strong> This demo uses the regression model, which estimates
+                a single year between <strong className="text-foreground">2006</strong> and{" "}
+                <strong className="text-foreground">2024</strong>.
               </p>
               <Button variant="outline" size="sm" className="gap-2 bg-transparent" asChild>
                 <a
