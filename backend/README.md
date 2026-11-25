@@ -21,8 +21,9 @@ backend/
 │   ├── 2binclassifier.py # 2-bin classifier training
 │   ├── train_classifier.py # Generic classifier training
 │   ├── train_regressor.py  # Regression model training
-│   ├── redditmain.py     # Legacy classifier (reference)
-│   └── redditregression.py # Legacy regression (reference)
+│   └── legacy/             # Legacy scripts kept for reference
+│       ├── redditmain.py     # Legacy classifier (reference)
+│       └── redditregression.py # Legacy regression (reference)
 ├── models/                # Model artifacts
 │   ├── reddit_year_model/ # 2-bin classifier weights
 │   └── reddit_year_model_regressor/ # Regression model weights
