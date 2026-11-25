@@ -23,7 +23,7 @@ Transformer models that predict when a Reddit comment was written from its text 
 | Backend structure, API, training | `backend/README.md` | Changing `backend/` |
 | Frontend setup | `frontend/README.md` | Changing `frontend/` |
 | Dataset layout | `data/README.md` | Touching `data/` |
-| Model weights setup | `docs/COPY_MODEL_FILES.md` | Inference fails or weights are missing |
+| Model weights setup | `docs/copy-model-files.md` | Inference fails or weights are missing |
 | Demo walkthrough | `docs/demo-guide.md` | Preparing a demo |
 | Pre-presentation checks | `docs/testing-checklist.md` | Before presenting or deploying |
 
@@ -32,7 +32,7 @@ Transformer models that predict when a Reddit comment was written from its text 
 |---|---|---|
 | API or inference change | `backend/README.md`, `backend/api/main.py` | `backend/core/predict.py`, `backend/core/models.py` |
 | Training or evaluation | `backend/README.md` | `backend/training/`, `scripts/train_all.sh` |
-| Charts and figures | `docs/GENERATE_VISUALIZATIONS.md` | `backend/scripts/generate_visualizations.py` |
+| Charts and figures | `docs/generate-visualizations.md` | `backend/scripts/generate_visualizations.py` |
 | Website change | `frontend/README.md` | `frontend/components/`, `frontend/app/api/predict/route.ts` |
 | Dataset question | `data/README.md` | `data/sampled_comments/` |
 | Demo or release check | `docs/demo-guide.md`, `docs/testing-checklist.md` | `README.md` |

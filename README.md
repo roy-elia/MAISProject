@@ -111,7 +111,7 @@ backend/models/reddit_year_model_regressor/
 ```
 
 For detailed instructions, see:  
-`docs/COPY_MODEL_FILES.md`
+`docs/copy-model-files.md`
 
 
 
@@ -151,8 +151,8 @@ http://localhost:3000
 - **docs/** — Additional documentation:
   - `demo-guide.md` — Step-by-step demo walkthrough  
   - `testing-checklist.md` — Pre-presentation checklist  
-  - `COPY_MODEL_FILES.md` — How to add trained model weights  
-  - `GENERATE_VISUALIZATIONS.md` — Visualization generation guide  
+  - `copy-model-files.md` — How to add trained model weights  
+  - `generate-visualizations.md` — Visualization generation guide  
 
 
 

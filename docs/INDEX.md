@@ -11,8 +11,8 @@ Purpose: shared, durable context for roy-elia/MAISProject. Read this before plac
 
 | File | Summary (one line) | Read when | Owner |
 |---|---|---|---|
-| `COPY_MODEL_FILES.md` | How to copy trained model files into the backend model folders | Inference fails or weights are missing | roy-elia |
-| `GENERATE_VISUALIZATIONS.md` | How to generate the figures shown on the website | Regenerating charts or word clouds | roy-elia |
+| `copy-model-files.md` | How to copy trained model files into the backend model folders | Inference fails or weights are missing | roy-elia |
+| `generate-visualizations.md` | How to generate the figures shown on the website | Regenerating charts or word clouds | roy-elia |
 | `deliverable-4-proposal.md` | Course deliverable: final demonstration proposal | Writing about project goals or the demo | roy-elia |
 | `demo-guide.md` | Step-by-step walkthrough for the live demo | Preparing a demo | roy-elia |
 | `testing-checklist.md` | Manual checklist before presenting, committing or deploying | Before presenting or deploying | roy-elia |

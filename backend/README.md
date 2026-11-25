@@ -55,7 +55,7 @@ Place your trained model files in the appropriate directories:
 - **Regression Model** (fallback): `backend/models/reddit_year_model_regressor/`
   - Same structure as above
 
-See [../docs/COPY_MODEL_FILES.md](../docs/COPY_MODEL_FILES.md) for detailed instructions.
+See [../docs/copy-model-files.md](../docs/copy-model-files.md) for detailed instructions.
 
 ### 3. Start the API Server
 
@@ -180,7 +180,7 @@ This creates:
 
 Save these to `frontend/public/` for display on the website.
 
-See [../docs/GENERATE_VISUALIZATIONS.md](../docs/GENERATE_VISUALIZATIONS.md) for more details.
+See [../docs/generate-visualizations.md](../docs/generate-visualizations.md) for more details.
 
 ## Development
 
