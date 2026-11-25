@@ -17,5 +17,5 @@ Drop static assets here. Next.js serves everything in this folder at the site ro
 ## Notes
 - Files appear automatically in the Visualizations section.
 - Missing files render a placeholder with instructions, so the page never breaks.
-- See `GENERATE_VISUALIZATIONS.md` or run `python generate_visualizations.py` to regenerate charts.
+- See `docs/generate-visualizations.md` in the repository or run `python generate_visualizations.py` to regenerate charts.
 

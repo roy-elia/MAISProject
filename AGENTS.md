@@ -23,7 +23,7 @@ Transformer models that predict when a Reddit comment was written from its text 
 | Backend structure, API, training | `backend/README.md` | Changing `backend/` |
 | Frontend setup | `frontend/README.md` | Changing `frontend/` |
 | Dataset layout | `data/README.md` | Touching `data/` |
-| Model weights setup | `docs/COPY_MODEL_FILES.md` | Inference fails or weights are missing |
+| Model weights setup | `docs/copy-model-files.md` | Inference fails or weights are missing |
 | Demo walkthrough | `docs/demo-guide.md` | Preparing a demo |
 | Pre-presentation checks | `docs/testing-checklist.md` | Before presenting or deploying |
 
@@ -32,7 +32,7 @@ Transformer models that predict when a Reddit comment was written from its text 
 |---|---|---|
 | API or inference change | `backend/README.md`, `backend/api/main.py` | `backend/core/predict.py`, `backend/core/models.py` |
 | Training or evaluation | `backend/README.md` | `backend/training/`, `scripts/train_all.sh` |
-| Charts and figures | `docs/GENERATE_VISUALIZATIONS.md` | `backend/scripts/generate_visualizations.py` |
+| Charts and figures | `docs/generate-visualizations.md` | `backend/scripts/generate_visualizations.py` |
 | Website change | `frontend/README.md` | `frontend/components/`, `frontend/app/api/predict/route.ts` |
 | Dataset question | `data/README.md` | `data/sampled_comments/` |
 | Demo or release check | `docs/demo-guide.md`, `docs/testing-checklist.md` | `README.md` |
@@ -67,7 +67,7 @@ No skills in this repo. Do not invent one; propose it in a pull request first.
 | Run frontend (port 3000) | `cd frontend && npm run dev` |
 | Frontend build / lint | `cd frontend && npm run build` / `npm run lint` |
 | Run both plus ngrok | `./start_all.sh` (opens a public tunnel; run only when asked) |
-| Train models | `scripts/train_all.sh` (see Owner questions: it names a `src.` module that does not exist) |
+| Train models | `scripts/train_all.sh` (runs `backend.training.train_classifier` and `train_regressor`) |
 | Tests | none found; use `docs/testing-checklist.md` by hand |
 | Health check (standard) | `bash .github/scripts/ai-health-check.sh` |
 
@@ -83,7 +83,6 @@ No skills in this repo. Do not invent one; propose it in a pull request first.
 
 ## Owner questions
 - Tracker, wiki, design and research systems: are there any, or is GitHub the only one?
-- `scripts/train_all.sh` runs `python -m src.train_classifier`, but there is no src folder (training lives in `backend/training/`). Which entry point is current?
 - `docs/demo-guide.md` says `pip install -r requirements.txt` at root; the README says `backend/requirements.txt`. Both files exist; which is canonical?
 - Tracked weights and datasets (`backend/models/`, `data/`) are large and include a `.DS_Store`. Intended, or move to Git LFS or external storage?
 - Is the project still maintained (dormant), and who besides roy-elia should be listed under People?
