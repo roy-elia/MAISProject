@@ -102,7 +102,7 @@ async def health_check():
 
 
 @app.post("/predict", response_model=PredictionResponse)
-async def predict_year(request: PredictionRequest):
+def predict_year(request: PredictionRequest):
     """
     Predict the year for a Reddit comment.
     
@@ -143,7 +143,7 @@ async def predict_year(request: PredictionRequest):
 
 
 @app.post("/predict/batch")
-async def predict_batch(texts: list[str]):
+def predict_batch(texts: list[str]):
     """
     Predict years for multiple comments.
     

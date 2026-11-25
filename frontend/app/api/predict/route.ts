@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// The backend may need up to a minute to wake from sleep on its free host.
+export const maxDuration = 60
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()

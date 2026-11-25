@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:22fb8afd33dffada38fdc32365b33f84df11874c84d34e920390d4641c1467fd
-size 370
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/block_secrets.py\"",
+            "timeout": 5,
+            "statusMessage": "Checking for secrets"
+          }
+        ]
+      }
+    ]
+  }
+}
