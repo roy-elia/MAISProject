@@ -4,6 +4,7 @@ Inference script to predict year for Reddit-style comments.
 
 import os
 import sys
+import threading
 import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, AutoConfig, BertForSequenceClassification
@@ -12,6 +13,11 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, Auto
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.models import load_classification_model, load_regression_model
+
+# The free host has a fraction of one CPU. PyTorch otherwise starts one thread
+# per visible host core, and those threads fight over that fraction.
+# Set TORCH_NUM_THREADS on a host with real cores.
+torch.set_num_threads(int(os.environ.get("TORCH_NUM_THREADS", "1")))
 
 
 class YearPredictor:
@@ -70,6 +76,10 @@ class YearPredictor:
         
         self.model.to(self.device)
         self.model.eval()
+        # One prediction at a time. The API runs requests in a thread pool, and a
+        # request the client gave up on keeps running; without the lock those
+        # pile up and share the CPU until every request times out.
+        self._lock = threading.Lock()
         print(f"Model loaded from {model_path} on device: {self.device}")
     
     def predict(self, text: str, max_length: int = 256) -> dict:
@@ -98,7 +108,7 @@ class YearPredictor:
         encoding = {k: v.to(self.device) for k, v in encoding.items()}
         
         # Predict
-        with torch.inference_mode():
+        with self._lock, torch.inference_mode():
             outputs = self.model(**encoding)
             logits = outputs.logits
         
