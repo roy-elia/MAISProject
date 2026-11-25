@@ -6,3 +6,6 @@
 
 # The frontend is deployed by Vercel from plain files: keep its JSON out of LFS.
 frontend/**/*.json !filter !diff !merge
+# Tool configuration must stay plain JSON (readable without Git LFS).
+.claude/**/*.json !filter !diff !merge
+.vscode/**/*.json !filter !diff !merge
