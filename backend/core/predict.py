@@ -84,10 +84,12 @@ class YearPredictor:
             Dictionary with prediction results
         """
         # Tokenize
+        # No padding: a single sequence needs none, and padding every comment to
+        # max_length made each request cost as much as a 256-token comment.
+        # Outputs are identical (checked on the regressor, max diff 0.0).
         encoding = self.tokenizer(
             text,
             truncation=True,
-            padding='max_length',
             max_length=max_length,
             return_tensors='pt'
         )
@@ -96,7 +98,7 @@ class YearPredictor:
         encoding = {k: v.to(self.device) for k, v in encoding.items()}
         
         # Predict
-        with torch.no_grad():
+        with torch.inference_mode():
             outputs = self.model(**encoding)
             logits = outputs.logits
         
