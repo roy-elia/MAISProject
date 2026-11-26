@@ -1,0 +1,55 @@
+# Runs the prediction API under the limits of Render's free instance
+# (512 MB of memory, 0.1 CPU) and fails if a prediction takes too long.
+# Render deploys take about 25 minutes; this finds a memory or speed problem first.
+# It downloads the model from Git LFS (about 500 MB of LFS bandwidth per run),
+# so it runs only when the API, the model or the requirements change.
+name: api-free-plan-check
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "backend/api/**"
+      - "backend/core/**"
+      - "backend/models/reddit_year_model_regressor/**"
+      - "requirements.txt"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: Fetch the regression model from Git LFS
+        run: git lfs pull --include "backend/models/reddit_year_model_regressor/*" --exclude "backend/models/reddit_year_model_regressor/checkpoint-*/**"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install requirements (same file Render uses)
+        run: pip install --quiet -r requirements.txt
+      - name: Start the API at 512 MB and 0.1 CPU
+        run: |
+          sudo systemd-run --unit=mais-api --uid="$(id -u)" --gid="$(id -g)" \
+            -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=10% \
+            --working-directory="$PWD" -E PATH="$PATH" \
+            "$(command -v uvicorn)" backend.api.main:app --host 127.0.0.1 --port 8000
+          for i in $(seq 1 120); do
+            curl -sf http://127.0.0.1:8000/health | grep -q '"model_loaded":true' && { echo "API up after $((i*5)) s"; exit 0; }
+            systemctl is-active --quiet mais-api || { echo "API process stopped"; sudo journalctl -u mais-api --no-pager | tail -30; exit 1; }
+            sleep 5
+          done
+          echo "API did not start within 10 minutes"; sudo journalctl -u mais-api --no-pager | tail -30; exit 1
+      - name: Time predictions (each must finish within 20 s)
+        run: |
+          for t in "lol" "This meme is fire fr fr no cap" "Just upgraded to Windows Vista, loving the new Aero look"; do
+            curl -sf --max-time 20 -X POST http://127.0.0.1:8000/predict \
+              -H 'Content-Type: application/json' \
+              -d "{\"text\": \"$t\", \"task_type\": \"regression\"}" \
+              -w '  (%{time_total} s)\n'
+          done
+          echo "Memory peak: $(( $(systemctl show mais-api -p MemoryPeak --value) / 1048576 )) MB"
+      - name: API log
+        if: always()
+        run: sudo journalctl -u mais-api --no-pager | tail -40
