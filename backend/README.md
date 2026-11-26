@@ -116,7 +116,7 @@ Health check endpoint.
 - `MODEL_PATH_CLASSIFICATION` (default: `./backend/models/reddit_year_model`)
   - Path to the 2-bin classifier model directory
   
-- `MODEL_PATH_REGRESSION` (default: `./backend/models/reddit_year_model_regressor`)
+- `MODEL_PATH_REGRESSION` (default: `./backend/models/reddit_year_model_regressor_fp16`, a half-precision copy of `reddit_year_model_regressor` that fits a 512 MB host)
   - Path to the regression model directory
 
 ## Training Models

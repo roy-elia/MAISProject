@@ -1,3 +1,6 @@
+# Linux (the Render API host) gets CPU-only PyTorch: no GPU there, and the CUDA
+# libraries add gigabytes to the build and memory to the running server.
+--extra-index-url https://download.pytorch.org/whl/cpu
 accelerate==1.12.0
 altair==5.5.0
 annotated-types==0.7.0
@@ -87,8 +90,10 @@ threadpoolctl==3.6.0
 tiktoken==0.11.0
 tokenizers==0.22.1
 toml==0.10.2
-torch==2.8.0
-torchaudio==2.8.0
+torch==2.8.0+cpu ; sys_platform == "linux"
+torch==2.8.0 ; sys_platform != "linux"
+torchaudio==2.8.0+cpu ; sys_platform == "linux"
+torchaudio==2.8.0 ; sys_platform != "linux"
 tornado==6.5.1
 tqdm==4.67.1
 transformers==4.57.1

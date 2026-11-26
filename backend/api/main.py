@@ -56,9 +56,11 @@ async def load_model():
     """Load regression-only model on startup."""
     global predictor
 
+    # The half-precision copy (about 250 MB) fits a 512 MB free instance;
+    # the fp32 original next to it is about 500 MB and does not.
     model_path_regression = os.getenv(
         "MODEL_PATH_REGRESSION",
-        "./backend/models/reddit_year_model_regressor"
+        "./backend/models/reddit_year_model_regressor_fp16"
     )
 
     if os.path.exists(model_path_regression):
