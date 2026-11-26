@@ -71,7 +71,11 @@ class YearPredictor:
             config = AutoConfig.from_pretrained(model_path)
             config.num_labels = 1
             config.problem_type = "regression"
-            self.model = AutoModelForSequenceClassification.from_pretrained(model_path, config=config)
+            # Half precision by default: the fp32 weights (about 500 MB) do not fit
+            # in a 512 MB free instance next to PyTorch. Scores match fp32 within
+            # 0.01 on our checks. Set MODEL_DTYPE=float32 where memory allows.
+            dtype = getattr(torch, os.environ.get("MODEL_DTYPE", "float16"))
+            self.model = AutoModelForSequenceClassification.from_pretrained(model_path, config=config, dtype=dtype)
             self.year_range = list(range(start_year, end_year + 1))
         
         self.model.to(self.device)
