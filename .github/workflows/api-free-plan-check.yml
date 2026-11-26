@@ -1,7 +1,7 @@
 # Runs the prediction API under the limits of Render's free instance
 # (512 MB of memory, 0.1 CPU) and fails if a prediction takes too long.
 # Render deploys take about 25 minutes; this finds a memory or speed problem first.
-# It downloads the model from Git LFS (about 500 MB of LFS bandwidth per run),
+# It downloads the model from Git LFS (about 250 MB of LFS bandwidth per run),
 # so it runs only when the API, the model or the requirements change.
 name: api-free-plan-check
 
@@ -11,7 +11,7 @@ on:
     paths:
       - "backend/api/**"
       - "backend/core/**"
-      - "backend/models/reddit_year_model_regressor/**"
+      - "backend/models/reddit_year_model_regressor_fp16/**"
       - "requirements.txt"
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
         with:
           lfs: false
       - name: Fetch the regression model from Git LFS
-        run: git lfs pull --include "backend/models/reddit_year_model_regressor/*" --exclude "backend/models/reddit_year_model_regressor/checkpoint-*/**"
+        run: git lfs pull --include "backend/models/reddit_year_model_regressor_fp16/*"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
