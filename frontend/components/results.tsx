@@ -30,8 +30,8 @@ export function Results() {
           <h2 className="text-3xl font-bold text-center">Results</h2>
         </div>
         <p className="text-sm text-muted-foreground text-center max-w-3xl mx-auto">
-          The live experience prioritizes the 2-bin classifier. If those weights are absent, the regression model predicts a
-          specific year so the storytelling still lands.
+          The live demo runs the regression model, which predicts a specific year. The 2-bin classifier scored higher in testing,
+          but its weights are not deployed.
         </p>
 
         <Card className="p-10 card-hover border-2 border-accent/20 hover:border-accent/40 relative overflow-hidden">

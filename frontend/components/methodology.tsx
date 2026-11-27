@@ -114,10 +114,10 @@ export function Methodology() {
             </div>
             <div className="pr-16">
               <div className="flex items-baseline gap-2 mb-3">
-                <h3 className="text-2xl font-bold">Regression Fallback</h3>
+                <h3 className="text-2xl font-bold">Regression (Live Demo)</h3>
                 <span className="text-xs text-muted-foreground font-medium">2006–2024</span>
               </div>
-              <p className="text-muted-foreground mb-6 text-sm">Continuous year prediction if classification weights are missing</p>
+              <p className="text-muted-foreground mb-6 text-sm">Continuous year prediction; this model powers the live demo</p>
               <div className="space-y-2 mb-6">
                 <div className="flex items-center gap-2 text-sm">
                   <Sparkles className="h-4 w-4 text-accent flex-shrink-0" />
@@ -168,8 +168,8 @@ export function Methodology() {
           <div className="pr-16">
             <h3 className="text-2xl font-bold mb-3">Serving & Demo</h3>
             <p className="text-muted-foreground mb-6 text-sm">
-              FastAPI loads the classifier if weights exist and falls back to regression otherwise. The Next.js frontend
-              consumes the `/predict` endpoint live.
+              FastAPI serves the regression model, stored in half precision to fit in the free host’s 512 MB. The Next.js frontend
+              calls `/predict` through its own API route.
             </p>
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>• Environment variables: `MODEL_PATH_CLASSIFICATION`, `MODEL_PATH_REGRESSION`, `NEXT_PUBLIC_API_URL`</p>

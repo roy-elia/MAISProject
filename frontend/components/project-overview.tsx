@@ -13,8 +13,8 @@ const highlights = [
     body: "Language alone tells us which Reddit era a comment belongs to. We treat slang, emoji density, and cultural references as signals.",
   },
   {
-    title: "Fast Demo-Ready Model",
-    body: "A distilled 2-bin RoBERTa classifier (2008-2010 vs 2020-2022) powers the live demo with 85.3% accuracy and millisecond latency.",
+    title: "Best Model: 2-Bin Classifier",
+    body: "A 2-bin RoBERTa classifier (2008-2010 vs 2020-2022) reached 85.3% accuracy in testing. The live demo runs the regression model, which estimates a single year.",
   },
   {
     title: "Regression Fallback",
