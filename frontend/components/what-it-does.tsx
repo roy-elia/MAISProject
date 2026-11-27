@@ -18,10 +18,10 @@ const workflow = [
     stat: "3 epoch FT",
   },
   {
-    title: "Demo in Real Time",
-    description: "FastAPI serves predictions to the Next.js frontend in <200ms per request.",
+    title: "Live Demo",
+    description: "FastAPI serves the regression model to the Next.js frontend. A prediction takes about a second once the server is awake; the free host sleeps when idle, so the first request can take up to a minute.",
     icon: Presentation,
-    stat: "<200ms",
+    stat: "~1 s",
   },
 ]
 

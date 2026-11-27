@@ -22,7 +22,7 @@ export function Conclusion() {
           <div className="space-y-8 relative z-10">
             <div className="text-center space-y-4">
               <div className="inline-block p-8 rounded-2xl bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 border-2 border-accent/30 shadow-xl hover:scale-105 transition-transform">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Demo Accuracy</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Best Accuracy</p>
                 <div className="text-6xl font-bold bg-gradient-to-r from-accent via-accent/90 to-accent bg-clip-text text-transparent">85%</div>
                 <p className="text-sm font-semibold text-muted-foreground mt-3">2-bin classifier (2008-2010 vs 2020-2022)</p>
               </div>

@@ -42,7 +42,7 @@ export function Hero() {
             </div>
             <div>
               <div className="text-lg font-bold text-foreground">85%</div>
-              <div className="text-xs text-muted-foreground">Accuracy</div>
+              <div className="text-xs text-muted-foreground">2-bin accuracy</div>
             </div>
           </div>
           <div className="flex items-center gap-3 px-6 py-3 rounded-xl glass hover-lift border border-accent/20 shadow-lg hover:shadow-accent/30 transition-all group">
@@ -67,7 +67,7 @@ export function Hero() {
 
         <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
           <span className="px-4 py-2 rounded-full bg-secondary/60 border border-border/70 text-sm font-medium text-muted-foreground">
-            RoBERTa-base · 2-bin classifier
+            RoBERTa-base · 2-bin classifier + regression demo
           </span>
         </div>
 
