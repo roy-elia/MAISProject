@@ -1,15 +1,21 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server"
 
-export const maxDuration = 60
+export const dynamic = "force-dynamic"
 
-// Lets the page wake the backend (a free host that sleeps when idle) on load.
+// The backend runs on a free host that sleeps when idle and takes a minute or
+// more to wake. Each check waits only a few seconds, so the page can poll this
+// route and show progress instead of hanging on one long request.
 export async function GET() {
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
   try {
-    const response = await fetch(`${backendUrl}/health`, { cache: 'no-store' })
-    const data = await response.json()
-    return NextResponse.json(data, { status: response.ok ? 200 : 502 })
+    const response = await fetch(`${backendUrl}/health`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    })
+    const data = await response.json().catch(() => ({}))
+    const ready = response.ok && data?.model_loaded === true
+    return NextResponse.json({ status: ready ? "ready" : "waking" }, { status: ready ? 200 : 503 })
   } catch {
-    return NextResponse.json({ status: 'unreachable' }, { status: 502 })
+    return NextResponse.json({ status: "waking" }, { status: 503 })
   }
 }
