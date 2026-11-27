@@ -19,9 +19,9 @@ const workflow = [
   },
   {
     title: "Live Demo",
-    description: "FastAPI serves the regression model to the Next.js frontend. A prediction takes about a second once the server is awake; the free host sleeps when idle, so the first request can take up to a minute.",
+    description: "FastAPI serves the regression model to the Next.js frontend. A prediction takes a few seconds once the server is awake; the free host sleeps when idle, so the first request can take a minute or two.",
     icon: Presentation,
-    stat: "~1 s",
+    stat: "Live",
   },
 ]
 
@@ -44,8 +44,7 @@ export function WhatItDoes() {
           <p className="text-xs font-semibold tracking-[0.3em] uppercase text-muted-foreground">Experience</p>
           <h2 className="text-3xl font-bold">What the system actually does</h2>
           <p className="text-sm text-muted-foreground max-w-3xl mx-auto">
-            Type any Reddit-style comment. We return the era that best explains its wording, plus confidence and class
-            probabilities.
+            Type any Reddit-style comment. We return the year that best fits its wording.
           </p>
         </div>
 
@@ -85,8 +84,8 @@ export function WhatItDoes() {
             </div>
 
             <p className="text-sm text-muted-foreground">
-              Under the hood we also log class probabilities, so we can demonstrate how confidently the model recognizes a
-              specific era’s language.
+              The 2-bin classifier also outputs class probabilities, which show how confidently it recognizes each era’s
+              language.
             </p>
           </div>
         </Card>
