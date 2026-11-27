@@ -15,12 +15,14 @@ backend/
 ├── core/                   # Core ML logic
 │   ├── predict.py        # YearPredictor class for inference
 │   ├── models.py         # Model loading utilities
-│   ├── dataset.py        # Data loading and preprocessing
+│   ├── dataset.py        # Data loading and preprocessing (classifiers)
+│   ├── regression_data.py # Cleaning, sampling and splits for the regressor
 │   └── visualize.py      # Visualization utilities
 ├── training/              # Training scripts
 │   ├── 2binclassifier.py # 2-bin classifier training
 │   ├── train_classifier.py # Generic classifier training
 │   ├── train_regressor.py  # Regression model training
+│   ├── export_fp16.py      # Half-precision copy for serving
 │   └── legacy/             # Legacy scripts kept for reference
 │       ├── redditmain.py     # Legacy classifier (reference)
 │       └── redditregression.py # Legacy regression (reference)
@@ -134,13 +136,56 @@ This script:
 
 ### Regression Model (2006-2024)
 
+Check the data first. This loads no model and writes nothing:
+
+```bash
+python -m backend.training.train_regressor --dry_run
+```
+
+The data is cleaned (deleted and removed comments and self-declared bots are
+dropped, some bots remain; dump formatting such as HTML escapes is undone),
+sampled at random and balanced by year. March of every year is held out for
+validation and September for test; training uses the other ten months.
+
+The sample is narrower than "every month" suggests. `data/commentcleaner` kept
+only the first 20,000 comments of each monthly dump, so from 2009 a file covers
+less than a day, and from 2012 typically under an hour, at the start of the
+month. The test score says little about comments from other days or hours.
+
+Training needs a GPU. Run it from the repository root. In a GPU notebook install
+these versions, not the root `requirements.txt`, which pins CPU-only PyTorch:
+
+```bash
+pip install transformers==4.57.1 accelerate==1.12.0 scikit-learn pandas
+```
+
+Trial run first (about 100,000 comments):
+
 ```bash
 python -m backend.training.train_regressor \
-  --start_year 2006 \
-  --end_year 2024 \
-  --model_name roberta-base \
-  --output_dir ./backend/models/reddit_year_model_regressor
+  --train_per_year 5300 --num_epochs 2 --output_dir output/regressor-trial
 ```
+
+Full run (760,000 comments, 3 epochs):
+
+```bash
+python -m backend.training.train_regressor
+```
+
+A free notebook can disconnect during a long run. Point `--output_dir` at storage
+that outlives the notebook (about 4 GB, for example a mounted drive). To continue,
+run the same command again with `--resume`. Resuming has not been tried on a real
+run yet.
+
+Each run writes to its output folder: checkpoints, `final/` (full precision),
+`fp16/` (the copy to serve) and `metrics.json`. The gate is in `metrics.json`:
+`passes_gate` is true only if the model's test error is lower than that of a
+TF-IDF baseline scored on the same test comments. The baseline is fitted on at
+most 400,000 of the training comments, so in the full run it sees less data than
+the model. Deploy only a full run that passes, by
+copying `fp16/` over `backend/models/reddit_year_model_regressor_fp16/` and
+`final/` over `backend/models/reddit_year_model_regressor/` in a pull request.
+Do not add checkpoint folders to Git.
 
 ### Generic Classifier Training
 
