@@ -88,8 +88,10 @@ def build_training_args(
     warmup_ratio: float = 0.1,
     random_state: int = 42,
 ) -> TrainingArguments:
-    """Evaluate every 2,000 steps, or every epoch when an epoch is shorter (on one GPU)."""
-    interval = min(EVAL_EVERY_STEPS, math.ceil(train_rows / batch_size))
+    """Evaluate every 2,000 steps, or every epoch when an epoch is shorter."""
+    # batch_size is per GPU, so two GPUs halve the number of steps in an epoch.
+    rows_per_step = batch_size * max(1, torch.cuda.device_count())
+    interval = min(EVAL_EVERY_STEPS, math.ceil(train_rows / rows_per_step))
     return TrainingArguments(
         output_dir=output_dir,
         num_train_epochs=num_epochs,
@@ -142,18 +144,18 @@ def build_trainer(model, tokenizer, args, train_dataset, eval_dataset, max_index
     )
 
 
-def tfidf_baseline(train_df, test_df, max_index: int, max_rows: int = 400_000, random_state: int = 42) -> np.ndarray:
+def tfidf_baseline(train_df, test_df, max_index: int) -> np.ndarray:
     """
     Predict the test years with word and character TF-IDF plus ridge regression.
 
-    The transformer has to beat this to be worth deploying. It is fitted on at
-    most `max_rows` comments to keep memory within a free GPU notebook.
+    The transformer has to beat this to be worth deploying, so it is fitted on
+    the same training rows. Single precision keeps memory low: 760,000 rows
+    peaked under 4 GB.
     """
-    if len(train_df) > max_rows:
-        train_df = train_df.sample(max_rows, random_state=random_state)
+    shared = dict(sublinear_tf=True, max_features=200_000, dtype=np.float32)
     features = make_union(
-        TfidfVectorizer(sublinear_tf=True, min_df=2, ngram_range=(1, 2), max_features=200_000),
-        TfidfVectorizer(analyzer="char_wb", sublinear_tf=True, min_df=3, ngram_range=(3, 5), max_features=200_000),
+        TfidfVectorizer(min_df=2, ngram_range=(1, 2), **shared),
+        TfidfVectorizer(analyzer="char_wb", min_df=3, ngram_range=(3, 5), **shared),
     )
     model = Ridge(alpha=2.0, solver="sparse_cg")
     model.fit(features.fit_transform(train_df["body"]), train_df["label"])
@@ -230,8 +232,8 @@ def main(argv=None) -> None:
         return
 
     train_mean = float(train_df["label"].mean())
-    print("Fitting the TF-IDF baseline...")
-    baseline = tfidf_baseline(train_df, test_df, max_index, random_state=args.seed)
+    print("Fitting the TF-IDF baseline (several minutes on the full data)...")
+    baseline = tfidf_baseline(train_df, test_df, max_index)
     baseline_mae = float(mean_absolute_error(test_df["label"], baseline))
     print(f"Baseline test MAE: {baseline_mae:.3f} years")
 

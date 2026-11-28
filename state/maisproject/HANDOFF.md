@@ -1,6 +1,6 @@
 # MAISProject handoff
 
-Last updated: 2026-11-27. Branch: `feat/regressor-retrain-prep` (committed locally, not pushed).
+Last updated: 2026-11-27. Branch: `feat/regressor-retrain-prep`, pull request 12.
 
 ## Goal and status
 
@@ -35,21 +35,23 @@ so serving and label scaling are not the cause.
 - Mean 42 tokens per comment, 2% truncated at 256; batches pad to about 45.
 - Tests (tiny random models, `Trainer.train` replaced) are kept outside the repo;
   the repo has no test folder.
-- Not verified: any real training step, GPU memory, run time, multi-GPU.
+- Real training steps with a tiny random model on a CPU: a run stopped mid-way
+  and resumed ended with the same weights as an uninterrupted one, and its fp16
+  copy loaded in `backend/core/predict.py`.
+- TF-IDF baseline on the full 760,000 rows: test MAE 3.61, peak 3.7 GB, about
+  6 minutes on a laptop. This is the figure the full run has to beat.
+- Not verified: training `roberta-base`, GPU memory, run time, a real multi-GPU run.
 
 ## Next step
 
-Owner: review, push and open a pull request, then run the trial and full run on a GPU
+Owner: review and merge pull request 12, then run the trial and full run on a GPU
 (`backend/README.md`, "Regression Model"). Deploy only if `metrics.json` has
 `passes_gate: true` on the full run.
 
 ## Open points
 
 - Compute and time figures are estimates (full run: 3-6 h on one T4).
-- `--resume` is untested on a real run; `output/` must outlive the notebook.
-- The baseline is fitted on at most 400,000 rows, so the full-run gate is
-  somewhat easier than a same-size comparison.
-- On two GPUs, short runs do not evaluate exactly once per epoch.
+- For `--resume` to help, `output/` must outlive the notebook.
 - The CSVs hold only each month's first 20,000 comments (minutes of data in
   recent years). Resampling the raw dumps (2.23 TB compressed) is a separate
   decision.

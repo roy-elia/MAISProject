@@ -174,15 +174,15 @@ python -m backend.training.train_regressor
 
 A free notebook can disconnect during a long run. Point `--output_dir` at storage
 that outlives the notebook (about 4 GB, for example a mounted drive). To continue,
-run the same command again with `--resume`. Resuming has not been tried on a real
-run yet.
+run the same command again with `--resume`. Stopping and resuming was checked with
+a tiny stand-in model on a CPU, not yet with `roberta-base` on a GPU.
 
 Each run writes to its output folder: checkpoints, `final/` (full precision),
 `fp16/` (the copy to serve) and `metrics.json`. The gate is in `metrics.json`:
 `passes_gate` is true only if the model's test error is lower than that of a
-TF-IDF baseline scored on the same test comments. The baseline is fitted on at
-most 400,000 of the training comments, so in the full run it sees less data than
-the model. Deploy only a full run that passes, by
+TF-IDF baseline fitted on the same training comments and scored on the same test
+comments. On the full data the baseline reached a test error of 3.61 years on a
+laptop, where it took about 6 minutes. Deploy only a full run that passes, by
 copying `fp16/` over `backend/models/reddit_year_model_regressor_fp16/` and
 `final/` over `backend/models/reddit_year_model_regressor/` in a pull request.
 Do not add checkpoint folders to Git.
