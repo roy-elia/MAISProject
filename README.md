@@ -27,7 +27,7 @@ The frontend sends user-submitted Reddit-style comments to the backend API, whic
 ## Snapshot
 
 - **85.3% accuracy** using a **RoBERTa-base 2-bin classifier** (2008–2010 vs 2020–2022)
-- **Regression fallback** (MAE ≈ 4.4 years) keeps the `/predict` endpoint functional even without classifier weights
+- **Regression model (live demo)**: test-split MAE 4.4 years, RMSE 5.2 (228 comments); always guessing 2015 gives 4.7 and 5.5
 - **Next.js frontend** for visualization and interaction
 - **FastAPI backend** for inference
 - **Visualizations and storytelling assets** ready for a project fair or demo booth

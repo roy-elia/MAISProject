@@ -121,11 +121,11 @@ export function Methodology() {
               <div className="space-y-2 mb-6">
                 <div className="flex items-center gap-2 text-sm">
                   <Sparkles className="h-4 w-4 text-accent flex-shrink-0" />
-                  <span className="text-muted-foreground"><strong className="text-foreground">MAE: 4.4 years</strong> • RMSE: 5.6</span>
+                  <span className="text-muted-foreground"><strong className="text-foreground">MAE: 4.4 years</strong> • RMSE: 5.2 (test split, 228 comments)</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <BarChart3 className="h-4 w-4 text-accent flex-shrink-0" />
-                  <span className="text-muted-foreground">Off-by-2 accuracy: 72%</span>
+                  <span className="text-muted-foreground">Within 2 years: 23% on the test split (always guessing 2015 scores 26%)</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Brain className="h-4 w-4 text-accent flex-shrink-0" />
